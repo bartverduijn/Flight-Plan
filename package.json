@@ -1,6 +1,6 @@
 {
 	"private": true,
-	"name": "Flight Plan",
+	"name": "flightplan",
 	"description": "TODO list app",
 	"author": "Bart Verduijn",
 	"license": "MIT",
@@ -8,6 +8,9 @@
 		"url": "https://github.com/bartverduijn/Flight-Plan/issues"
 	},
 	"homepage": "https://github.com/bartverduijn/Flight-Plan#readme",
+	"prisma": {
+		"seed": "node --require esbuild-register prisma/seed.ts"
+	},
 	"scripts": {
 		"build": "remix build",
 		"dev": "remix dev",
@@ -34,6 +37,7 @@
 		"@types/react-dom": "^17.0.9",
 		"@typescript-eslint/eslint-plugin": "^5.4.0",
 		"@typescript-eslint/parser": "^5.4.0",
+		"esbuild-register": "^3.2.0",
 		"eslint": "^8.3.0",
 		"eslint-config-airbnb": "^19.0.1",
 		"eslint-config-airbnb-typescript": "^16.0.0",
