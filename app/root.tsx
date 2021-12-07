@@ -1,11 +1,15 @@
-import { Links, LinksFunction, LiveReload } from 'remix';
+import { Links, LiveReload, Outlet, Scripts } from 'remix';
+import type { LinksFunction } from 'remix';
 import styles from './styles/generated.css';
 
 export const links: LinksFunction = () => {
 	return [{ rel: 'stylesheet', href: styles }];
 };
 
-export default function App() {
+type LayoutProps = {
+	children: React.ReactNode;
+};
+function Document({ children }: LayoutProps) {
 	return (
 		<html lang="en">
 			<head>
@@ -13,10 +17,19 @@ export default function App() {
 				<title>Remix: So great, it's funny!</title>
 				<Links />
 			</head>
-			<body className="text-xl">
-				Hello world
+			<body>
+				{children}
+				<Scripts />
 				{process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
 			</body>
 		</html>
+	);
+}
+
+export default function App() {
+	return (
+		<Document>
+			<Outlet />
+		</Document>
 	);
 }
