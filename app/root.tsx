@@ -17,7 +17,7 @@ function Document({ children }: LayoutProps) {
 				<title>Remix: So great, it's funny!</title>
 				<Links />
 			</head>
-			<body>
+			<body className="antialiased text-slate-900">
 				{children}
 				<Scripts />
 				{process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
