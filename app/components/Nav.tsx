@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Project } from '@prisma/client';
-import NavButton from './NavButton';
 import { NavLink } from 'remix';
-import { InboxIcon, StarIcon, ViewListIcon } from '@heroicons/react/outline';
+import { InboxIcon, StarIcon, ViewListIcon } from '@heroicons/react/solid';
+import type { Project } from '@prisma/client';
+import NavButton from './NavButton';
 
 type NavProps = { projects: Array<Project> };
 
@@ -30,14 +30,14 @@ export default function Nav({ projects }: NavProps) {
 				</div>
 			</header>
 			<div
-				className={`fixed top-0 bottom-0 w-64 overflow-x-hidden overflow-y-auto bg-white shadow-2xl motion-safe:transition-transform	 ${
+				className={`fixed top-0 bottom-0 w-64 overflow-x-hidden overflow-y-auto bg-white shadow-2xl transition-transform motion-reduce:transition-none	 ${
 					isOpen ? 'translate-x-0' : '-translate-x-64'
 				}`}
 				onFocus={() => setIsOpen(true)}
 				onBlur={() => setIsOpen(false)}
 			>
 				<div className="flex flex-col w-full min-h-full">
-					<header className="px-4 py-4 ">
+					<header className="px-5 py-4 ">
 						<div className="w-10 h-10 bg-indigo-200 rounded-2xl"></div>
 					</header>
 					<nav>
@@ -48,8 +48,11 @@ export default function Nav({ projects }: NavProps) {
 									to="/"
 									ref={navNode}
 								>
-									<span className="w-5 h-5 mr-4" aria-hidden="true">
-										<InboxIcon className="text-slate-400" />
+									<span
+										className="w-5 h-5 mr-2 text-indigo-500"
+										aria-hidden="true"
+									>
+										<InboxIcon />
 									</span>
 									Inbox
 								</NavLink>
@@ -59,8 +62,11 @@ export default function Nav({ projects }: NavProps) {
 									className="flex items-center h-full px-3 rounded-md py-auto hover:bg-indigo-50 focus:bg-indigo-100"
 									to="today"
 								>
-									<span className="w-5 h-5 mr-4" aria-hidden="true">
-										<StarIcon className="text-slate-400" />
+									<span
+										className="w-5 h-5 mr-2 text-amber-500"
+										aria-hidden="true"
+									>
+										<StarIcon />
 									</span>
 									Today
 								</NavLink>
@@ -76,7 +82,7 @@ export default function Nav({ projects }: NavProps) {
 										className="flex items-center h-full px-3 rounded-md py-auto hover:bg-indigo-50 focus:bg-indigo-100"
 										to={project.id}
 									>
-										<span className="w-5 h-5 mr-4" aria-hidden="true">
+										<span className="w-5 h-5 mr-2" aria-hidden="true">
 											<ViewListIcon className="text-slate-400" />
 										</span>
 										{project.name}

@@ -36,5 +36,6 @@ module.exports = {
 		'react/jsx-indent': 'off',
 		'react/react-in-jsx-scope': 'off',
 		'react/jsx-uses-react': 'off',
+		'import/extensions': 'off',
 	},
 };
