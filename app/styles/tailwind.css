@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.highlight[data-reach-menu-item][data-selected] {
+	@apply bg-indigo-600;
+}
