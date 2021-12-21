@@ -11,13 +11,13 @@ type LayoutProps = {
 };
 function Document({ children }: LayoutProps) {
 	return (
-		<html lang="en">
+		<html lang="en" className="w-full h-full">
 			<head>
 				<meta charSet="utf-8" />
 				<title>Remix: So great, it's funny!</title>
 				<Links />
 			</head>
-			<body className="text-sm antialiased text-slate-900">
+			<body className="w-full h-full text-sm antialiased text-slate-900">
 				{children}
 				<Scripts />
 				{process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
