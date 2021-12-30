@@ -8,12 +8,7 @@ interface IconButtonProps {
 	onClick: () => void;
 }
 
-const IconButton = React.forwardRef(function IconButton({
-	children,
-	alt,
-	onFocus,
-	onClick,
-}: IconButtonProps) {
+function IconButton({ children, alt, onFocus, onClick }: IconButtonProps) {
 	return (
 		<button
 			onClick={onClick}
@@ -26,6 +21,6 @@ const IconButton = React.forwardRef(function IconButton({
 			<VisuallyHidden>{alt}</VisuallyHidden>
 		</button>
 	);
-});
+}
 
 export default IconButton;

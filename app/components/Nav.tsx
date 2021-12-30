@@ -1,116 +1,104 @@
 import * as React from 'react';
 import { NavLink } from 'remix';
-import { Menu, MenuButton, MenuLink, MenuPopover } from '@reach/menu-button';
-import { MenuAlt2Icon, FolderIcon, CubeIcon } from '@heroicons/react/outline';
-import {
-	InboxIcon,
-	StarIcon,
-	ViewListIcon,
-	PlusIcon,
-} from '@heroicons/react/solid';
+import { NavLinkProps } from 'remix';
+import { MenuAlt2Icon } from '@heroicons/react/outline';
+import { ViewListIcon, InboxIcon, CalendarIcon } from '@heroicons/react/solid';
 import IconButton from '~/components/IconButton';
 import { Project } from '@prisma/client';
+import clsx from 'clsx';
 
-export function AddNewMenu() {
-	return (
-		<Menu>
-			<MenuButton className="flex items-center w-full h-10 px-5 py-auto">
-				<span className="w-5 h-5 mr-2 text-slate-400" aria-hidden="true">
-					<PlusIcon />
-				</span>
-				Add List
-			</MenuButton>
-			<MenuPopover>
-				<div className="ml-4 overflow-hidden text-white rounded-lg shadow-xl bg-slate-800">
-					<MenuLink as={NavLink} to="/projects/new" className="highlight">
-						<div className="flex py-4">
-							<span className="w-6 h-6 mr-4 text-slate-300" aria-hidden="true">
-								<FolderIcon />
-							</span>
-							<div>
-								<p className="font-semibold">New Project</p>
-								<p className="max-w-xs mt-1 text-slate-400">
-									Projects are defined as outcomes that will require more than
-									one action step to complete and that you can mark off as
-									finished in the next 12 months.
-								</p>
-							</div>
-						</div>
-					</MenuLink>
-					<MenuLink as={NavLink} to="TODO" className="highlight">
-						<div className="flex py-4">
-							<span className="w-6 h-6 mr-4 text-slate-300" aria-hidden="true">
-								<CubeIcon />
-							</span>
-							<div>
-								<p className="font-semibold">New Area</p>
-								<p className="max-w-xs mt-1 text-slate-400">
-									Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-									Laboriosam fugiat aut tempore! Fuga accusantium id mollitia
-									nam quasi culpa. Voluptatibus!
-								</p>
-							</div>
-						</div>
-					</MenuLink>
-				</div>
-			</MenuPopover>
-		</Menu>
-	);
+interface TopLevelLinkProps extends NavLinkProps {
+	icon: React.ReactNode;
+	shadow: string;
 }
+const TopLevelLink = React.forwardRef<HTMLAnchorElement, TopLevelLinkProps>(
+	({ className, icon, shadow, children, ...props }, ref) => {
+		return (
+			<li>
+				<NavLink
+					ref={ref}
+					{...props}
+					className={({ isActive }) =>
+						clsx(
+							'group flex items-center h-10',
+							className,
+							isActive
+								? 'font-semibold text-indigo-700'
+								: 'font-medium text-gray-700 hover:text-gray-900'
+						)
+					}
+					end
+				>
+					{({ isActive }) => (
+						<>
+							<span
+								className={clsx(
+									'mr-4 p-1				 rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10',
+									shadow,
+									isActive ? '' : ''
+								)}
+								aria-hidden="true"
+							>
+								{icon}
+							</span>
+							{children}
+						</>
+					)}
+				</NavLink>
+			</li>
+		);
+	}
+);
 
 interface NavProps {
 	projects: Array<Project>;
-	media?: string;
-	ref: React.Ref<HTMLAnchorElement> | undefined;
+	media: string;
 }
 
-export const Nav = React.forwardRef(function Nav({
-	projects,
-	media = '',
-	ref,
-}: NavProps) {
+export const Nav = React.forwardRef(function Nav(
+	{ projects, media = '' }: NavProps,
+	ref: React.Ref<HTMLAnchorElement> | undefined
+) {
 	return (
 		<div
-			className={`w-64 h-full overflow-x-hidden overflow-y-auto bg-white ${media}`}
+			className={`w-80 px-8 h-full overflow-x-hidden overflow-y-auto ${media}`}
 		>
 			<div className="flex flex-col w-full min-h-full">
-				<header className="px-5 py-4 ">
-					<div className="w-10 h-10 bg-indigo-200 rounded-2xl"></div>
+				<header className="py-4">
+					<input
+						type="search"
+						name="search"
+						id="search"
+						placeholder="Placeholder..."
+						className="w-full px-3 py-2 text-sm leading-6 text-gray-400 rounded-md shadow-sm ring-1 ring-gray-900/10"
+					/>
 				</header>
 				<nav className="flex-1">
 					<ul className="my-2">
-						<li className="h-10 px-2">
-							<NavLink
-								className="flex items-center h-full px-3 rounded-md py-auto hover:bg-indigo-50 focus:bg-indigo-100"
-								to="/"
-								ref={ref}
-							>
-								<span
-									className="w-5 h-5 mr-2 text-indigo-500"
-									aria-hidden="true"
-								>
-									<InboxIcon />
-								</span>
-								Inbox
-							</NavLink>
-						</li>
-						<li className="h-10 px-2">
-							<NavLink
-								className="flex items-center h-full px-3 rounded-md py-auto hover:bg-indigo-50 focus:bg-indigo-100"
-								to="today"
-							>
-								<span
-									className="w-5 h-5 mr-2 text-amber-500"
-									aria-hidden="true"
-								>
-									<StarIcon />
-								</span>
-								Today
-							</NavLink>
-						</li>
+						<TopLevelLink
+							ref={ref}
+							to=""
+							className="mb-2"
+							shadow="group-hover:shadow-indigo-200"
+							icon={
+								<InboxIcon className="w-5 h-5 fill-indigo-300 group-hover:fill-indigo-400" />
+							}
+						>
+							Inbox
+						</TopLevelLink>
+						<TopLevelLink
+							to="today"
+							className="mb-4"
+							shadow="group-hover:shadow-pink-200"
+							icon={
+								<CalendarIcon className="w-5 h-5 fill-pink-400 group-hover:fill-pink-500" />
+							}
+						>
+							Today
+						</TopLevelLink>
 					</ul>
 
-					<hr className="border-slate-300" aria-hidden="true" />
+					<hr className="border-gray-300" aria-hidden="true" />
 
 					<ul className="my-2">
 						{projects.map(project => (
@@ -120,7 +108,7 @@ export const Nav = React.forwardRef(function Nav({
 									to={project.id}
 								>
 									<span className="w-5 h-5 mr-2" aria-hidden="true">
-										<ViewListIcon className="text-slate-400" />
+										<ViewListIcon className="text-gray-400" />
 									</span>
 									{project.name}
 								</NavLink>
@@ -128,9 +116,6 @@ export const Nav = React.forwardRef(function Nav({
 						))}
 					</ul>
 				</nav>
-				<footer className="block">
-					<AddNewMenu />
-				</footer>
 			</div>
 		</div>
 	);
@@ -138,7 +123,7 @@ export const Nav = React.forwardRef(function Nav({
 
 interface MobileNavProps {
 	projects: Array<Project>;
-	media: string;
+	media?: string;
 }
 
 export function MobileNav({ projects, media }: MobileNavProps) {
