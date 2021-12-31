@@ -35,9 +35,7 @@ export default function Projects() {
 			<SkipNavLink />
 			<Nav projects={data.projects} media="hidden lg:block" />
 			<div className="relative w-full ">
-				<Header>
-					{/* <MobileNav projects={data.projects} media="block lg:hidden" /> */}
-				</Header>
+				<Header>Header</Header>
 				<SkipNavContent>
 					<main className="">
 						<Outlet />
