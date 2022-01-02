@@ -26,11 +26,9 @@
 		"pre-commit": "lint-staged"
 	},
 	"dependencies": {
+		"@headlessui/react": "^1.4.2",
 		"@heroicons/react": "^1.0.5",
 		"@prisma/client": "^3.7.0",
-		"@reach/menu-button": "^0.16.2",
-		"@reach/skip-nav": "^0.16.0",
-		"@reach/visually-hidden": "^0.16.0",
 		"@remix-run/react": "^1.1.1",
 		"@remix-run/serve": "^1.1.1",
 		"clsx": "^1.1.1",

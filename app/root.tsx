@@ -1,9 +1,9 @@
 import { Links, LiveReload, Outlet, Scripts } from 'remix';
 import type { LinksFunction } from 'remix';
-import styles from './styles/generated.css';
+import tailwindStyles from './styles/generated.css';
 
 export const links: LinksFunction = () => {
-	return [{ rel: 'stylesheet', href: styles }];
+	return [{ rel: 'stylesheet', href: tailwindStyles }];
 };
 
 type LayoutProps = {
@@ -11,13 +11,13 @@ type LayoutProps = {
 };
 function Document({ children }: LayoutProps) {
 	return (
-		<html lang="en" className="w-full h-full">
+		<html lang="en">
 			<head>
 				<meta charSet="utf-8" />
-				<title>Remix: So great, it's funny!</title>
+				<title>Flight Plan</title>
 				<Links />
 			</head>
-			<body className="w-full h-full text-sm antialiased text-slate-900">
+			<body className="relative h-screen antialiased text-gray-500 bg-white">
 				{children}
 				<Scripts />
 				{process.env.NODE_ENV === 'development' ? <LiveReload /> : null}

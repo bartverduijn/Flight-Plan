@@ -1,20 +1,8 @@
-import type { LoaderFunction, LinksFunction } from 'remix';
 import { Outlet, useLoaderData } from 'remix';
-import { SkipNavContent, SkipNavLink } from '@reach/skip-nav';
+import type { LoaderFunction } from 'remix';
 import type { Project } from '@prisma/client';
 import { db } from '~/utils/db.server';
-import Header from '~/components/Header';
-import { MobileNav, Nav } from '~/components/Nav';
-
-import skipNavStyles from '@reach/skip-nav/styles.css';
-import menuButtonStyles from '@reach/menu-button/styles.css';
-
-export const links: LinksFunction = () => {
-	return [
-		{ rel: 'stylesheet', href: skipNavStyles },
-		{ rel: 'stylesheet', href: menuButtonStyles },
-	];
-};
+import { SidebarLayout } from '~/layouts/SidebarLayout';
 
 interface LoaderData {
 	projects: Array<Project>;
@@ -31,17 +19,10 @@ export default function Projects() {
 	const data: LoaderData = useLoaderData();
 
 	return (
-		<div className="flex h-full">
-			<SkipNavLink />
-			<Nav projects={data.projects} media="hidden lg:block" />
-			<div className="relative w-full ">
-				<Header>Header</Header>
-				<SkipNavContent>
-					<main className="">
-						<Outlet />
-					</main>
-				</SkipNavContent>
-			</div>
-		</div>
+		<SidebarLayout projects={data.projects}>
+			<main className="">
+				<Outlet />
+			</main>
+		</SidebarLayout>
 	);
 }
