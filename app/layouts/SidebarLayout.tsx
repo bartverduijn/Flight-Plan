@@ -201,7 +201,7 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 
 			{/* Sidebar Nav for larger screens */}
 			<a
-				className="z-50 hidden sr-only lg:block focus:bg-indigo-100 focus:not-sr-only focus:absolute focus:p-4"
+				className="z-50 hidden sr-only lg:block focus:bg-indigo-100 focus:not-sr-only focus:absolute focus:p-4 focus:font-medium focus:text-gray-900"
 				href="#content"
 			>
 				Skip Navigation
