@@ -21,11 +21,14 @@ export function IconButton({
 			onClick={onClick}
 			onFocus={onFocus}
 			className={clsx(
-				'w-10 h-10 p-2 rounded-lg hover:bg-indigo-100 focus:bg-indigo-100',
+				'w-10 h-10 p-2 rounded-md group hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500',
 				className
 			)}
 		>
-			<span aria-hidden="true" className="text-slate-700">
+			<span
+				aria-hidden="true"
+				className="text-gray-400 group-hover:text-gray-500"
+			>
 				{children}
 			</span>
 			<span className="sr-only">{alt}</span>

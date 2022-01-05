@@ -4,7 +4,7 @@ import { Dialog } from '@headlessui/react';
 import type { NavLinkProps } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
-import { MenuAlt2Icon, XIcon } from '@heroicons/react/outline';
+import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import {
 	ViewListIcon,
 	InboxIcon,
@@ -181,7 +181,7 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 			<div className="lg:hidden">
 				<Header>
 					<IconButton alt="Open Nav" onClick={openNav}>
-						<MenuAlt2Icon />
+						<MenuAlt1Icon />
 					</IconButton>
 				</Header>
 				<Dialog className="fixed inset-0" open={navIsOpen} onClose={closeNav}>
