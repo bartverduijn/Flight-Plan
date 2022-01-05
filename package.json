@@ -18,7 +18,7 @@
 		"dev:css": "tailwindcss -i ./app/styles/tailwind.css -o ./app/styles/generated.css --watch",
 		"postinstall": "remix setup node",
 		"start": "remix-serve build",
-		"lint": "eslint .",
+		"lint": "eslint --cache --cache-location ./node_modules/.cache/.eslintcache --ext js,jsx,ts,tsx .",
 		"prettier": "prettier \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\"",
 		"format": "npm run prettier -- --write",
 		"validate": "npm run lint && npm run prettier -- --list-different",
