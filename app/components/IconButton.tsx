@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { AccessibleIcon } from './AccessibleIcon';
 
 interface IconButtonProps {
 	className?: string;
@@ -25,13 +26,12 @@ export function IconButton({
 				className
 			)}
 		>
-			<span
-				aria-hidden="true"
+			<AccessibleIcon
+				alt={alt}
 				className="text-gray-400 group-hover:text-gray-500"
 			>
 				{children}
-			</span>
-			<span className="sr-only">{alt}</span>
+			</AccessibleIcon>
 		</button>
 	);
 }
