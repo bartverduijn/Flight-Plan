@@ -4,15 +4,19 @@ import { Dialog } from '@headlessui/react';
 import type { NavLinkProps } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
-import { MenuAlt1Icon, XIcon } from '@heroicons/react/outline';
 import {
-	ViewListIcon,
+	MenuAlt1Icon,
+	XIcon,
 	InboxIcon,
 	CalendarIcon,
 	CollectionIcon,
-} from '@heroicons/react/solid';
+} from '@heroicons/react/outline';
+import { ViewListIcon } from '@heroicons/react/solid';
 import { IconButton } from '~/components/IconButton';
 import { Header } from '~/components/Header';
+import { Logo } from '~/components/Logo';
+import { VisuallyHidden } from '~/components/VisuallyHidden';
+import { AccessibleIcon } from '~/components/AccessibleIcon';
 
 interface SidebarContextInterface {
 	navIsOpen: boolean;
@@ -22,14 +26,18 @@ interface SidebarContextInterface {
 export const SideBarContext =
 	React.createContext<SidebarContextInterface | null>(null);
 
+/* -------------------------------------------------------------------------------------------------
+ * TopLevelNav
+ * -----------------------------------------------------------------------------------------------*/
+
 interface TopLevelNavItemProps extends NavLinkProps {
 	icon: React.ReactNode;
-	shadow: string;
 }
+
 const TopLevelNavItem = React.forwardRef<
 	HTMLAnchorElement,
 	TopLevelNavItemProps
->(({ icon, shadow, children, ...props }, forwardedRef) => {
+>(({ icon, children, ...props }, forwardedRef) => {
 	const ctx = React.useContext(SideBarContext);
 	return (
 		<li>
@@ -37,10 +45,10 @@ const TopLevelNavItem = React.forwardRef<
 				ref={forwardedRef}
 				className={({ isActive }) =>
 					clsx(
-						'group flex items-center h-10',
+						'group flex items-center h-10 px-10 hover:bg-slate-200 dark:hover:bg-gray-600 dark:font-medium focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
 						isActive
-							? 'font-bold text-indigo-500'
-							: 'font-medium text-gray-700 hover:text-gray-900'
+							? 'font-bold text-indigo-600 dark:text-gray-100'
+							: 'dark:text-gray-300 text-gray-700 hover:text-gray-900 dark:hover:text-gray-200'
 					)
 				}
 				onClick={() => ctx?.closeNav()}
@@ -51,11 +59,11 @@ const TopLevelNavItem = React.forwardRef<
 					<>
 						<span
 							className={clsx(
-								'mr-4 p-1	rounded-md ring-1 ring-gray-900/5 shadow-sm group-hover:shadow group-hover:ring-gray-900/10',
-								`group-hover:${shadow}`,
-								isActive ? ['shadow-inner ring-gray-900/10', shadow] : ''
+								'mr-4',
+								isActive
+									? 'text-indigo-500 dark:text-gray-100'
+									: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-300'
 							)}
-							aria-hidden="true"
 						>
 							{icon}
 						</span>
@@ -67,118 +75,118 @@ const TopLevelNavItem = React.forwardRef<
 	);
 });
 
+/* -----------------------------------------------------------------------------------------------*/
+
 function TopLevelNav() {
 	return (
 		<>
-			<TopLevelNavItem
-				to=""
-				shadow="shadow-indigo-200"
-				icon={
-					<InboxIcon className="w-5 h-5 fill-indigo-300 group-hover:fill-indigo-400" />
-				}
-			>
+			<TopLevelNavItem to="" icon={<InboxIcon className="w-6 h-6" />}>
 				Inbox
 			</TopLevelNavItem>
-			<TopLevelNavItem
-				to="today"
-				shadow="shadow-pink-200"
-				icon={
-					<CalendarIcon className="w-5 h-5 fill-pink-300 group-hover:fill-pink-400" />
-				}
-			>
+			<TopLevelNavItem to="today" icon={<CalendarIcon className="w-6 h-6" />}>
 				Today
 			</TopLevelNavItem>
-			<TopLevelNavItem
-				to="all"
-				shadow="shadow-emerald-200"
-				icon={
-					<CollectionIcon className="w-5 h-5 fill-emerald-300 group-hover:fill-emerald-400" />
-				}
-			>
+			<TopLevelNavItem to="all" icon={<CollectionIcon className="w-6 h-6" />}>
 				All Tasks
 			</TopLevelNavItem>
 		</>
 	);
 }
 
+/* -------------------------------------------------------------------------------------------------
+ * NavItem
+ * -----------------------------------------------------------------------------------------------*/
+
 interface NavItemProps extends NavLinkProps {
 	key: string;
 }
+
 const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
-	({ key, children, ...props }, forwardedRef) => {
+	({ children, ...props }, forwardedRef) => {
 		const ctx = React.useContext(SideBarContext);
 		return (
-			<li key={key}>
+			<li>
 				<NavLink
 					ref={forwardedRef}
 					className={({ isActive }) =>
 						clsx(
-							'group flex items-center h-10',
+							'group flex items-center h-10 px-10 hover:bg-slate-200 dark:hover:bg-gray-600 dark:font-medium focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
 							isActive
-								? 'font-semibold text-indigo-500'
-								: 'font-normal text-gray-700 hover:text-gray-900'
+								? 'font-bold text-indigo-600 dark:text-gray-100'
+								: 'dark:text-gray-300 text-gray-700 hover:text-gray-900 dark:hover:text-gray-200'
 						)
 					}
 					onClick={() => ctx?.closeNav()}
 					{...props}
 				>
-					<span className="p-1 mr-4" aria-hidden="true">
-						<ViewListIcon className="w-5 h-5 fill-gray-300 group-hover:fill-gray-400" />
-					</span>
-					{children}
+					<span className="truncate">{children}</span>
 				</NavLink>
 			</li>
 		);
 	}
 );
 
+/* -------------------------------------------------------------------------------------------------
+ * Nav
+ * -----------------------------------------------------------------------------------------------*/
+
 interface NavProps {
 	projects: Array<Project>;
 	mobile?: boolean;
 }
+
 function Nav({ projects, mobile = false }: NavProps) {
 	return (
 		<nav>
-			<div className={clsx(mobile ? 'hidden' : 'block')}>
-				<input
-					type="search"
-					name="search"
-					id="search"
-					placeholder="Placeholder..."
-					className="w-full px-3 py-2 text-sm leading-6 text-gray-400 rounded-md shadow-sm ring-1 ring-gray-900/10"
-				/>
+			<div className="px-10">
+				<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />
 			</div>
-			<ul className="my-6 space-y-2">
+			<ul className="mt-8">
 				<TopLevelNav />
 			</ul>
-			<hr className="border-gray-100 border-b-1" aria-hidden="true" />
-			{projects ? (
-				<ul className="my-6 space-y-2">
-					{projects.map(({ id, name }) => (
-						<NavItem key={id} to={id}>
-							{name}
-						</NavItem>
-					))}
-				</ul>
-			) : (
-				<p>No projects found...</p>
-			)}
+			<div className="mt-8">
+				<h5 className="px-10 text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+					Projects
+				</h5>
+				<div className="mt-1">
+					{projects.length ? (
+						<ul>
+							{projects.map(({ id, name }) => (
+								<NavItem key={id} to={id}>
+									{name}
+								</NavItem>
+							))}
+						</ul>
+					) : (
+						// TODO: Add empty state
+						<div className="px-10">
+							<p>No projects found...</p>
+						</div>
+					)}
+				</div>
+			</div>
 		</nav>
 	);
 }
+
+/* -------------------------------------------------------------------------------------------------
+ * SidebarLayout
+ * -----------------------------------------------------------------------------------------------*/
 
 interface SidebarLayoutProps {
 	children: React.ReactNode;
 	projects: Array<Project>;
 }
+
 export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 	const [navIsOpen, setNavIsOpen] = React.useState(false);
 	const openNav = () => setNavIsOpen(true);
 	const closeNav = () => setNavIsOpen(false);
+	// TODO: Fix mobile Nav
 	return (
 		<SideBarContext.Provider value={{ navIsOpen, openNav, closeNav }}>
 			{/* Mobile Nav*/}
-			<div className="lg:hidden">
+			{/* <div className="lg:hidden">
 				<Header>
 					<IconButton alt="Open Nav" onClick={openNav}>
 						<MenuAlt1Icon />
@@ -197,21 +205,24 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 						<Nav projects={projects} mobile={true} />
 					</div>
 				</Dialog>
-			</div>
+			</div> */}
 
 			{/* Sidebar Nav for larger screens */}
-			<a
+			{/* <a
 				className="z-50 hidden sr-only lg:block focus:bg-indigo-100 focus:not-sr-only focus:absolute focus:p-4 focus:font-medium focus:text-gray-900"
 				href="#content"
 			>
-				Skip Navigation
-			</a>
-			<div className="px-4 mx-auto max-w-8xl">
-				<div className="fixed top-0 bottom-0 left-0 hidden px-8 py-6 overflow-y-auto lg:block w-80">
-					<Nav projects={projects} />
+				Skip to Content
+			</a> */}
+			<div>
+				<div className="fixed top-0 bottom-0 left-0 block bg-gray-100 w-80 dark:bg-gray-700">
+					<div className="py-6 overflow-y-auto ">
+						<Nav projects={projects} />
+					</div>
 				</div>
-				<div id="content" className="lg:pl-80">
-					{children}
+				<div className="pl-80">
+					<div>header</div>
+					<div id="content">{children}</div>
 				</div>
 			</div>
 		</SideBarContext.Provider>

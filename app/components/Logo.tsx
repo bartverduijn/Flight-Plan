@@ -1,6 +1,6 @@
 import { AccessibleIcon } from './AccessibleIcon';
 
-export function Logo({ className }: { className: string }) {
+export function Logo({ className }: { className?: string }) {
 	return (
 		<svg
 			className={className}
