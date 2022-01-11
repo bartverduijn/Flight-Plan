@@ -2,7 +2,7 @@ import { Outlet, useLoaderData } from 'remix';
 import type { LoaderFunction } from 'remix';
 import type { Project } from '@prisma/client';
 import { db } from '~/utils/db.server';
-import { SidebarLayout } from '~/layouts/SidebarLayout';
+import { SidebarLayout } from '~/components/SidebarLayout';
 
 interface LoaderData {
 	projects: Array<Project>;

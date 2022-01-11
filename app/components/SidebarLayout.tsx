@@ -1,27 +1,25 @@
 import * as React from 'react';
 import { NavLink } from 'remix';
-import { Dialog } from '@headlessui/react';
 import type { NavLinkProps } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
 import {
 	MenuAlt1Icon,
-	XIcon,
 	InboxIcon,
 	CalendarIcon,
 	CollectionIcon,
+	PlusSmIcon,
 } from '@heroicons/react/outline';
-import { ViewListIcon } from '@heroicons/react/solid';
 import { IconButton } from '~/components/IconButton';
 import { Header } from '~/components/Header';
 import { Logo } from '~/components/Logo';
-import { VisuallyHidden } from '~/components/VisuallyHidden';
-import { AccessibleIcon } from '~/components/AccessibleIcon';
+import { AccessibleIcon } from './AccessibleIcon';
 
 interface SidebarContextInterface {
 	navIsOpen: boolean;
 	openNav: () => void;
 	closeNav: () => void;
+	toggleNav: () => void;
 }
 export const SideBarContext =
 	React.createContext<SidebarContextInterface | null>(null);
@@ -45,10 +43,10 @@ const TopLevelNavItem = React.forwardRef<
 				ref={forwardedRef}
 				className={({ isActive }) =>
 					clsx(
-						'group flex items-center h-10 px-10 hover:bg-slate-200 dark:hover:bg-gray-600 dark:font-medium focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
+						'group flex items-center h-10 px-10 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
 						isActive
-							? 'font-bold text-indigo-600 dark:text-gray-100'
-							: 'dark:text-gray-300 text-gray-700 hover:text-gray-900 dark:hover:text-gray-200'
+							? 'font-semibold text-indigo-600 dark:text-gray-50'
+							: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 					)
 				}
 				onClick={() => ctx?.closeNav()}
@@ -110,10 +108,10 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 					ref={forwardedRef}
 					className={({ isActive }) =>
 						clsx(
-							'group flex items-center h-10 px-10 hover:bg-slate-200 dark:hover:bg-gray-600 dark:font-medium focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
+							'group flex items-center h-10 px-10 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
 							isActive
-								? 'font-bold text-indigo-600 dark:text-gray-100'
-								: 'dark:text-gray-300 text-gray-700 hover:text-gray-900 dark:hover:text-gray-200'
+								? 'font-semibold text-indigo-600 dark:text-gray-50'
+								: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 						)
 					}
 					onClick={() => ctx?.closeNav()}
@@ -127,15 +125,35 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 );
 
 /* -------------------------------------------------------------------------------------------------
+ * ProjectsList
+ * -----------------------------------------------------------------------------------------------*/
+
+function ProjectsList({ projects }: { projects: Array<Project> }) {
+	return (
+		<>
+			{projects.length ? (
+				<ul>
+					{projects.map(({ id, name }) => (
+						<NavItem key={id} to={id}>
+							{name}
+						</NavItem>
+					))}
+				</ul>
+			) : (
+				// TODO: Add empty state
+				<div className="px-10">
+					<p>No projects found...</p>
+				</div>
+			)}
+		</>
+	);
+}
+
+/* -------------------------------------------------------------------------------------------------
  * Nav
  * -----------------------------------------------------------------------------------------------*/
 
-interface NavProps {
-	projects: Array<Project>;
-	mobile?: boolean;
-}
-
-function Nav({ projects, mobile = false }: NavProps) {
+function Nav({ children }: { children: React.ReactNode }) {
 	return (
 		<nav>
 			<div className="px-10">
@@ -145,25 +163,18 @@ function Nav({ projects, mobile = false }: NavProps) {
 				<TopLevelNav />
 			</ul>
 			<div className="mt-8">
-				<h5 className="px-10 text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
-					Projects
-				</h5>
-				<div className="mt-1">
-					{projects.length ? (
-						<ul>
-							{projects.map(({ id, name }) => (
-								<NavItem key={id} to={id}>
-									{name}
-								</NavItem>
-							))}
-						</ul>
-					) : (
-						// TODO: Add empty state
-						<div className="px-10">
-							<p>No projects found...</p>
-						</div>
-					)}
+				<div className="flex justify-between items-center px-10">
+					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+						Projects
+					</h5>
+					<NavLink
+						to="new"
+						className="p-2 rounded-md dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300"
+					>
+						<PlusSmIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+					</NavLink>
 				</div>
+				<div>{children}</div>
 			</div>
 		</nav>
 	);
@@ -182,47 +193,35 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 	const [navIsOpen, setNavIsOpen] = React.useState(false);
 	const openNav = () => setNavIsOpen(true);
 	const closeNav = () => setNavIsOpen(false);
-	// TODO: Fix mobile Nav
-	return (
-		<SideBarContext.Provider value={{ navIsOpen, openNav, closeNav }}>
-			{/* Mobile Nav*/}
-			{/* <div className="lg:hidden">
-				<Header>
-					<IconButton alt="Open Nav" onClick={openNav}>
-						<MenuAlt1Icon />
-					</IconButton>
-				</Header>
-				<Dialog className="fixed inset-0" open={navIsOpen} onClose={closeNav}>
-					<Dialog.Overlay className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm" />
-					<div className="relative z-10 max-w-[calc(100%-3rem)] p-6 bg-white w-80 h-full">
-						<IconButton
-							className="absolute top-4 right-4"
-							alt="Close Nav"
-							onClick={closeNav}
-						>
-							<XIcon />
-						</IconButton>
-						<Nav projects={projects} mobile={true} />
-					</div>
-				</Dialog>
-			</div> */}
+	const toggleNav = () => setNavIsOpen(!navIsOpen);
 
-			{/* Sidebar Nav for larger screens */}
-			{/* <a
-				className="z-50 hidden sr-only lg:block focus:bg-indigo-100 focus:not-sr-only focus:absolute focus:p-4 focus:font-medium focus:text-gray-900"
-				href="#content"
-			>
-				Skip to Content
-			</a> */}
+	return (
+		<SideBarContext.Provider
+			value={{ navIsOpen, openNav, closeNav, toggleNav }}
+		>
 			<div>
 				<div className="fixed top-0 bottom-0 left-0 block bg-gray-100 w-80 dark:bg-gray-700">
 					<div className="py-6 overflow-y-auto ">
-						<Nav projects={projects} />
+						<Nav>
+							<ProjectsList projects={projects} />
+						</Nav>
 					</div>
 				</div>
+
 				<div className="pl-80">
-					<div>header</div>
-					<div id="content">{children}</div>
+					<Header>
+						<div className="flex space-x-6 items-center">
+							<IconButton alt="Open Nav" onClick={toggleNav} disabled>
+								<MenuAlt1Icon />
+							</IconButton>
+							<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
+								Temporary header
+							</h1>
+						</div>
+					</Header>
+					<div id="content" className="px-8 py-4">
+						{children}
+					</div>
 				</div>
 			</div>
 		</SideBarContext.Provider>

@@ -8,7 +8,7 @@ export function AccessibleIcon({
 }: {
 	children: React.ReactNode;
 	alt: string;
-	className: string;
+	className?: string;
 }) {
 	const child = React.Children.only(children);
 	return (
@@ -16,7 +16,7 @@ export function AccessibleIcon({
 			{React.cloneElement(child as React.ReactElement, {
 				'aria-hidden': 'true',
 				focusable: 'false',
-				className: { className },
+				className,
 			})}
 			<VisuallyHidden>{alt}</VisuallyHidden>
 		</>
