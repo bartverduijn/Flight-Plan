@@ -24,7 +24,7 @@ export const action: ActionFunction = async ({ request }) => {
 	// 2. If the form data is not the type I expected, just return a generic error
 	if (typeof name !== 'string') {
 		const data: ActionData = {
-			formError: 'Form was submitted incorrectly. Please try again',
+			formError: 'Form was submitted incorrectly. Please try again.',
 		};
 		return json(data, { status: 400 });
 	}
@@ -33,9 +33,9 @@ export const action: ActionFunction = async ({ request }) => {
 	const fields = { name };
 
 	if (!name) {
-		fieldErrors.name = 'Project name is required';
+		fieldErrors.name = 'Project name is required.';
 	} else if (name.length < 3) {
-		fieldErrors.name = 'Project name must be at least 3 characters long';
+		fieldErrors.name = 'Project name must be at least 3 characters long.';
 	}
 
 	if (Object.values(fieldErrors).some(Boolean)) {
@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
 		return redirect(`/projects/${project.id}`);
 	} catch (err) {
 		const data: ActionData = {
-			formError: 'Something went wrong. Please try again later',
+			formError: 'Something went wrong. Please try again later.',
 		};
 		return json(data, { status: 400 });
 	}
@@ -62,10 +62,20 @@ export default function New() {
 				method="post"
 				aria-describedby={actionData?.formError ? 'form-error' : undefined}
 			>
+				{/* Generic form errors */}
 				{actionData?.formError ? (
-					<div>
+					<div className="p-4 my-2 text-sm text-red-700 bg-red-100 border-2 border-red-500 rounded-md shadow-sm dark:bg-red-900 dark:text-red-50 dark:border-red-900">
 						<p role="alert" id="form-error">
 							{actionData.formError}
+						</p>
+					</div>
+				) : null}
+
+				{/* Name field errors */}
+				{actionData?.fieldErrors?.name ? (
+					<div className="p-4 my-2 text-sm text-red-700 bg-red-100 border-2 border-red-500 rounded-md shadow-sm">
+						<p role="alert" id="name-error">
+							{actionData.fieldErrors.name}
 						</p>
 					</div>
 				) : null}
@@ -89,11 +99,6 @@ export default function New() {
 							name="name"
 							id="name"
 						/>
-						{actionData?.fieldErrors?.name ? (
-							<p role="alert" id="name-error">
-								{actionData.fieldErrors.name}
-							</p>
-						) : null}
 					</div>
 					<div className="col-span-2 text-right">
 						<button

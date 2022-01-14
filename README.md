@@ -5,7 +5,7 @@
 - [ ] Make layout component more reusable
 - [ ] Add mobile styles
 - [ ] Use useMatches to add header title
-- [ ] Style error messages (prevent layout shift)
+- [x] Style error messages (prevent layout shift)
 
 ## Projects
 - [x] Add error handling to 'new' page
