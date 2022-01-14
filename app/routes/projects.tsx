@@ -20,7 +20,7 @@ export default function Projects() {
 
 	return (
 		<SidebarLayout projects={data.projects}>
-			<main className="">
+			<main className="mx-auto max-w-7xl">
 				<Outlet />
 			</main>
 		</SidebarLayout>
