@@ -50,6 +50,7 @@ const TopLevelNavItem = React.forwardRef<
 					)
 				}
 				onClick={() => ctx?.closeNav()}
+				prefetch="intent"
 				{...props}
 				end
 			>
@@ -115,6 +116,7 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 						)
 					}
 					onClick={() => ctx?.closeNav()}
+					prefetch="intent"
 					{...props}
 				>
 					<span className="truncate">{children}</span>
@@ -163,7 +165,7 @@ function Nav({ children }: { children: React.ReactNode }) {
 				<TopLevelNav />
 			</ul>
 			<div className="mt-8">
-				<div className="flex justify-between items-center px-10">
+				<div className="flex items-center justify-between px-10">
 					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
 						Projects
 					</h5>
@@ -171,7 +173,7 @@ function Nav({ children }: { children: React.ReactNode }) {
 						to="new"
 						className="p-2 rounded-md dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300"
 					>
-						<PlusSmIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+						<PlusSmIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
 					</NavLink>
 				</div>
 				<div>{children}</div>
@@ -210,7 +212,7 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 
 				<div className="pl-80">
 					<Header>
-						<div className="flex space-x-6 items-center">
+						<div className="flex items-center space-x-6">
 							<IconButton alt="Open Nav" onClick={toggleNav} disabled>
 								<MenuAlt1Icon />
 							</IconButton>
