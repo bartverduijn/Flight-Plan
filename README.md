@@ -2,13 +2,14 @@
 
 ## Layout
 - [x] Style 'new' page
+- [x] Style error messages (prevent layout shift)
 - [ ] Make layout component more reusable
 - [ ] Add mobile styles
 - [ ] Use useMatches to add header title
-- [x] Style error messages (prevent layout shift)
 
 ## Projects
 - [x] Add error handling to 'new' page
+- [ ] Delete projects
 
 ## Tasks
 - [ ] Add Tasks to schema

@@ -1,5 +1,7 @@
+import { XCircleIcon } from '@heroicons/react/solid';
 import { ActionFunction, json, useActionData } from 'remix';
 import { redirect, Form } from 'remix';
+import { AccessibleIcon } from '~/components/AccessibleIcon';
 import { db } from '~/utils/db.server';
 
 interface FieldErrors {
@@ -62,23 +64,6 @@ export default function New() {
 				method="post"
 				aria-describedby={actionData?.formError ? 'form-error' : undefined}
 			>
-				{/* Generic form errors */}
-				{actionData?.formError ? (
-					<div className="p-4 my-2 text-sm text-red-700 bg-red-100 border-2 border-red-500 rounded-md shadow-sm dark:bg-red-900 dark:text-red-50 dark:border-red-900">
-						<p role="alert" id="form-error">
-							{actionData.formError}
-						</p>
-					</div>
-				) : null}
-
-				{/* Name field errors */}
-				{actionData?.fieldErrors?.name ? (
-					<div className="p-4 my-2 text-sm text-red-700 bg-red-100 border-2 border-red-500 rounded-md shadow-sm">
-						<p role="alert" id="name-error">
-							{actionData.fieldErrors.name}
-						</p>
-					</div>
-				) : null}
 				<div className="grid grid-cols-2 gap-6">
 					<div className="col-span-2">
 						<label
@@ -108,6 +93,32 @@ export default function New() {
 							Submit
 						</button>
 					</div>
+
+					{/* Errors */}
+					{actionData?.formError || actionData?.fieldErrors?.name ? (
+						<div className="flex col-span-2 gap-4 p-4 text-sm text-red-700 rounded-md bg-red-50 dark:bg-red-900 dark:text-red-100">
+							<AccessibleIcon className="w-5 h-5 text-red-400" alt="Error">
+								<XCircleIcon />
+							</AccessibleIcon>
+							<div>
+								<h5 className="font-semibold text-red-700 dark:text-red-50">
+									The following errors occurred with your submission
+								</h5>
+								<ul className="mt-2 list-disc list-inside">
+									{actionData?.formError ? (
+										<li role="alert" id="form-error">
+											{actionData.formError}
+										</li>
+									) : null}
+									{actionData?.fieldErrors?.name ? (
+										<li role="alert" id="name-error">
+											{actionData.fieldErrors.name}
+										</li>
+									) : null}
+								</ul>
+							</div>
+						</div>
+					) : null}
 				</div>
 			</Form>
 		</div>
