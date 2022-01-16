@@ -14,3 +14,5 @@ export const VisuallyHidden = React.forwardRef<
 		</span>
 	);
 });
+
+VisuallyHidden.displayName = 'VisuallyHidden';

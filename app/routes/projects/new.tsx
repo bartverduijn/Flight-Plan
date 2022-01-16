@@ -2,6 +2,8 @@ import { XCircleIcon } from '@heroicons/react/solid';
 import { ActionFunction, json, useActionData } from 'remix';
 import { redirect, Form } from 'remix';
 import { AccessibleIcon } from '~/components/AccessibleIcon';
+import { Button } from '~/components/Button';
+import { TextField } from '~/components/Form';
 import { db } from '~/utils/db.server';
 
 interface FieldErrors {
@@ -72,8 +74,7 @@ export default function New() {
 						>
 							New Project
 						</label>
-						<input
-							className="block w-full px-3 py-2 mt-1 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-700 dark:border-none dark:ring-offset-gray-800"
+						<TextField
 							placeholder="Project Name"
 							defaultValue={actionData?.fields?.name}
 							aria-invalid={Boolean(actionData?.fieldErrors?.name || undefined)}
@@ -86,12 +87,7 @@ export default function New() {
 						/>
 					</div>
 					<div className="col-span-2 text-right">
-						<button
-							className="flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:ring-offset-gray-800"
-							type="submit"
-						>
-							Submit
-						</button>
+						<Button type="submit">Submit</Button>
 					</div>
 
 					{/* Errors */}

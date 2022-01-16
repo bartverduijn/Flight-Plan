@@ -10,7 +10,7 @@ import {
 	CollectionIcon,
 	PlusSmIcon,
 } from '@heroicons/react/outline';
-import { IconButton } from '~/components/IconButton';
+import { IconButton } from '~/components/Button';
 import { Header } from '~/components/Header';
 import { Logo } from '~/components/Logo';
 import { AccessibleIcon } from './AccessibleIcon';
@@ -74,6 +74,8 @@ const TopLevelNavItem = React.forwardRef<
 	);
 });
 
+TopLevelNavItem.displayName = 'TopLevelNavItem';
+
 /* -----------------------------------------------------------------------------------------------*/
 
 function TopLevelNav() {
@@ -125,6 +127,8 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 		);
 	}
 );
+
+NavItem.displayName = 'NavItem';
 
 /* -------------------------------------------------------------------------------------------------
  * ProjectsList
@@ -202,8 +206,8 @@ export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
 			value={{ navIsOpen, openNav, closeNav, toggleNav }}
 		>
 			<div>
-				<div className="fixed top-0 bottom-0 left-0 block bg-gray-100 w-80 dark:bg-gray-700">
-					<div className="py-6 overflow-y-auto ">
+				<div className="fixed top-0 bottom-0 left-0 block max-h-full overflow-y-auto bg-gray-100 w-80 dark:bg-gray-700">
+					<div className="py-6">
 						<Nav>
 							<ProjectsList projects={projects} />
 						</Nav>
