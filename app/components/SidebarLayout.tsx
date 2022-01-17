@@ -11,9 +11,12 @@ import {
 	PlusSmIcon,
 } from '@heroicons/react/outline';
 import { IconButton } from '~/components/Button';
-import { Header } from '~/components/Header';
 import { Logo } from '~/components/Logo';
 import { AccessibleIcon } from './AccessibleIcon';
+
+/* -------------------------------------------------------------------------------------------------
+ * SidebarContext
+ * -----------------------------------------------------------------------------------------------*/
 
 interface SidebarContextInterface {
 	navIsOpen: boolean;
@@ -21,8 +24,36 @@ interface SidebarContextInterface {
 	closeNav: () => void;
 	toggleNav: () => void;
 }
-export const SideBarContext =
+
+export const SidebarContext =
 	React.createContext<SidebarContextInterface | null>(null);
+
+SidebarContext.displayName = 'SidebarContext';
+
+/* -----------------------------------------------------------------------------------------------*/
+
+export const useSidebarContext = () => React.useContext(SidebarContext);
+
+/* -----------------------------------------------------------------------------------------------*/
+
+export function withSidebarProvider(
+	Component: React.ComponentType<SidebarContextInterface>
+) {
+	return (props: SidebarContextInterface) => {
+		const [navIsOpen, setNavIsOpen] = React.useState(false);
+		const openNav = () => setNavIsOpen(true);
+		const closeNav = () => setNavIsOpen(false);
+		const toggleNav = () => setNavIsOpen(!navIsOpen);
+
+		return (
+			<SidebarContext.Provider
+				value={{ navIsOpen, openNav, closeNav, toggleNav }}
+			>
+				<Component {...props} />
+			</SidebarContext.Provider>
+		);
+	};
+}
 
 /* -------------------------------------------------------------------------------------------------
  * TopLevelNav
@@ -36,7 +67,7 @@ const TopLevelNavItem = React.forwardRef<
 	HTMLAnchorElement,
 	TopLevelNavItemProps
 >(({ icon, children, ...props }, forwardedRef) => {
-	const ctx = React.useContext(SideBarContext);
+	const ctx = React.useContext(SidebarContext);
 	return (
 		<li>
 			<NavLink
@@ -104,7 +135,7 @@ interface NavItemProps extends NavLinkProps {
 
 const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 	({ children, ...props }, forwardedRef) => {
-		const ctx = React.useContext(SideBarContext);
+		const ctx = React.useContext(SidebarContext);
 		return (
 			<li>
 				<NavLink
@@ -187,8 +218,29 @@ function Nav({ children }: { children: React.ReactNode }) {
 }
 
 /* -------------------------------------------------------------------------------------------------
+ * Header
+ * -----------------------------------------------------------------------------------------------*/
+
+interface HeaderProps {
+	children: React.ReactNode;
+	className?: string;
+}
+
+export function Header({ children, className }: HeaderProps) {
+	return (
+		<header className={clsx('bg-white p-6 dark:bg-gray-800', className)}>
+			<div className="flex items-center justify-between">
+				<div>{children}</div>
+			</div>
+		</header>
+	);
+}
+
+/* -------------------------------------------------------------------------------------------------
  * SidebarLayout
  * -----------------------------------------------------------------------------------------------*/
+
+// TEMP
 
 interface SidebarLayoutProps {
 	children: React.ReactNode;
@@ -196,40 +248,21 @@ interface SidebarLayoutProps {
 }
 
 export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
-	const [navIsOpen, setNavIsOpen] = React.useState(false);
-	const openNav = () => setNavIsOpen(true);
-	const closeNav = () => setNavIsOpen(false);
-	const toggleNav = () => setNavIsOpen(!navIsOpen);
-
 	return (
-		<SideBarContext.Provider
-			value={{ navIsOpen, openNav, closeNav, toggleNav }}
-		>
-			<div>
-				<div className="fixed top-0 bottom-0 left-0 block max-h-full overflow-y-auto bg-gray-100 w-80 dark:bg-gray-700">
-					<div className="py-6">
-						<Nav>
-							<ProjectsList projects={projects} />
-						</Nav>
-					</div>
-				</div>
-
-				<div className="pl-80">
-					<Header>
-						<div className="flex items-center space-x-6">
-							<IconButton alt="Open Nav" onClick={toggleNav} disabled>
-								<MenuAlt1Icon />
-							</IconButton>
-							<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
-								Temporary header
-							</h1>
-						</div>
-					</Header>
-					<div id="content" className="px-8 py-4">
-						{children}
-					</div>
+		<>
+			<div className="fixed top-0 bottom-0 left-0 block max-h-full overflow-y-auto bg-gray-100 w-80 dark:bg-gray-700">
+				<div className="py-6">
+					<Nav>
+						<ProjectsList projects={projects} />
+					</Nav>
 				</div>
 			</div>
-		</SideBarContext.Provider>
+
+			<div className="pl-80">
+				<div id="content" className="p-8 py-4">
+					{children}
+				</div>
+			</div>
+		</>
 	);
 }

@@ -2,7 +2,14 @@ import { Outlet, useLoaderData } from 'remix';
 import type { LoaderFunction } from 'remix';
 import type { Project } from '@prisma/client';
 import { db } from '~/utils/db.server';
-import { SidebarLayout } from '~/components/SidebarLayout';
+import {
+	Header,
+	SidebarLayout,
+	useSidebarContext,
+	withSidebarProvider,
+} from '~/components/SidebarLayout';
+import { IconButton } from '~/components/Button';
+import { MenuAlt1Icon } from '@heroicons/react/outline';
 
 interface LoaderData {
 	projects: Array<Project>;
@@ -15,14 +22,32 @@ export const loader: LoaderFunction = async () => {
 	return data;
 };
 
-export default function Projects() {
+function Projects() {
 	const data: LoaderData = useLoaderData();
+	const ctx = useSidebarContext();
 
 	return (
-		<SidebarLayout projects={data.projects}>
-			<main className="mx-auto max-w-7xl">
-				<Outlet />
-			</main>
-		</SidebarLayout>
+		<>
+			<div className="pl-80">
+				<Header>
+					<div className="flex items-center space-x-6">
+						<IconButton alt="Open Nav" onClick={ctx?.toggleNav}>
+							<MenuAlt1Icon />
+						</IconButton>
+						<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
+							Temporary header
+						</h1>
+					</div>
+				</Header>
+			</div>
+
+			<SidebarLayout projects={data.projects}>
+				<main className="mx-auto max-w-7xl">
+					<Outlet />
+				</main>
+			</SidebarLayout>
+		</>
 	);
 }
+
+export default withSidebarProvider(Projects);

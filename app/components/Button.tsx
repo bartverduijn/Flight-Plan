@@ -69,9 +69,6 @@ export function IconButton({
 	children,
 	alt,
 	className,
-	onFocus,
-	onClick,
-	disabled,
 	...props
 }: IconButtonProps) {
 	return (
@@ -80,9 +77,6 @@ export function IconButton({
 				'bg-white p-2 rounded-md dark:bg-gray-800 w-10 h-10 dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300 disabled:opacity-70 disabled:hover:bg-transparent disabled:cursor-not-allowed',
 				className
 			)}
-			onClick={onClick}
-			onFocus={onFocus}
-			disabled={disabled}
 			{...props}
 		>
 			<AccessibleIcon
