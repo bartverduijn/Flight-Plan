@@ -4,55 +4,87 @@ import type { NavLinkProps } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
 import {
-	MenuAlt1Icon,
 	InboxIcon,
 	CalendarIcon,
 	CollectionIcon,
 	PlusSmIcon,
 } from '@heroicons/react/outline';
-import { IconButton } from '~/components/Button';
 import { Logo } from '~/components/Logo';
-import { AccessibleIcon } from './AccessibleIcon';
 
 /* -------------------------------------------------------------------------------------------------
  * SidebarContext
  * -----------------------------------------------------------------------------------------------*/
 
 interface SidebarContextInterface {
-	navIsOpen: boolean;
-	openNav: () => void;
-	closeNav: () => void;
-	toggleNav: () => void;
+	sidebarIsOpen: boolean;
+	openSidebar: () => void;
+	closeSidebar: () => void;
+	toggleSidebar: () => void;
 }
 
-export const SidebarContext =
-	React.createContext<SidebarContextInterface | null>(null);
+export const SidebarContext = React.createContext<
+	SidebarContextInterface | undefined
+>(undefined);
 
 SidebarContext.displayName = 'SidebarContext';
 
 /* -----------------------------------------------------------------------------------------------*/
 
-export const useSidebarContext = () => React.useContext(SidebarContext);
+export function useSidebarContext() {
+	const context = React.useContext(SidebarContext);
+	if (context === undefined) {
+		throw Error('useSidebarContext must be used within a SidebarProvider');
+	}
+	return context;
+}
 
 /* -----------------------------------------------------------------------------------------------*/
 
-export function withSidebarProvider(
-	Component: React.ComponentType<SidebarContextInterface>
-) {
-	return (props: SidebarContextInterface) => {
-		const [navIsOpen, setNavIsOpen] = React.useState(false);
-		const openNav = () => setNavIsOpen(true);
-		const closeNav = () => setNavIsOpen(false);
-		const toggleNav = () => setNavIsOpen(!navIsOpen);
+export function withSidebarProvider<T>(Component: React.ComponentType<T>) {
+	const displayName = Component.displayName || Component.name || 'Component';
+
+	const ComponentWithSidebarContext = (props: T) => {
+		const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false);
+		const openSidebar = () => setSidebarIsOpen(true);
+		const closeSidebar = () => setSidebarIsOpen(false);
+		const toggleSidebar = () => setSidebarIsOpen(!sidebarIsOpen);
 
 		return (
 			<SidebarContext.Provider
-				value={{ navIsOpen, openNav, closeNav, toggleNav }}
+				value={{
+					sidebarIsOpen,
+					openSidebar,
+					closeSidebar,
+					toggleSidebar,
+				}}
 			>
 				<Component {...props} />
 			</SidebarContext.Provider>
 		);
 	};
+
+	ComponentWithSidebarContext.displayName = `withSidebarProvider(${displayName})`;
+
+	return ComponentWithSidebarContext;
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Header
+ * -----------------------------------------------------------------------------------------------*/
+
+interface HeaderProps {
+	children: React.ReactNode;
+	className?: string;
+}
+
+export function Header({ children, className }: HeaderProps) {
+	return (
+		<header className={clsx('bg-white p-6 dark:bg-gray-800', className)}>
+			<div className="flex items-center justify-between">
+				<div>{children}</div>
+			</div>
+		</header>
+	);
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -80,13 +112,14 @@ const TopLevelNavItem = React.forwardRef<
 							: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 					)
 				}
-				onClick={() => ctx?.closeNav()}
+				onClick={() => ctx?.closeSidebar()}
 				prefetch="intent"
 				{...props}
 				end
 			>
 				{({ isActive }) => (
 					<>
+						{/* // TODO Replace with AccessibleIcon */}
 						<span
 							className={clsx(
 								'mr-4',
@@ -109,9 +142,9 @@ TopLevelNavItem.displayName = 'TopLevelNavItem';
 
 /* -----------------------------------------------------------------------------------------------*/
 
-function TopLevelNav() {
+export function TopLevelNav() {
 	return (
-		<>
+		<ul>
 			<TopLevelNavItem to="" icon={<InboxIcon className="w-6 h-6" />}>
 				Inbox
 			</TopLevelNavItem>
@@ -121,7 +154,7 @@ function TopLevelNav() {
 			<TopLevelNavItem to="all" icon={<CollectionIcon className="w-6 h-6" />}>
 				All Tasks
 			</TopLevelNavItem>
-		</>
+		</ul>
 	);
 }
 
@@ -148,7 +181,7 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 								: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 						)
 					}
-					onClick={() => ctx?.closeNav()}
+					onClick={() => ctx?.closeSidebar()}
 					prefetch="intent"
 					{...props}
 				>
@@ -162,12 +195,26 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 NavItem.displayName = 'NavItem';
 
 /* -------------------------------------------------------------------------------------------------
- * ProjectsList
+ * ProjectsNav
  * -----------------------------------------------------------------------------------------------*/
 
-function ProjectsList({ projects }: { projects: Array<Project> }) {
+export function ProjectsNav({ projects }: { projects: Array<Project> }) {
 	return (
-		<>
+		<div>
+			<div className="px-10">
+				<div className="flex items-center justify-between">
+					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+						Projects
+					</h5>
+					<NavLink
+						to="new"
+						className="p-2 rounded-md dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300"
+					>
+						<PlusSmIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+					</NavLink>
+				</div>
+			</div>
+
 			{projects.length ? (
 				<ul>
 					{projects.map(({ id, name }) => (
@@ -182,87 +229,41 @@ function ProjectsList({ projects }: { projects: Array<Project> }) {
 					<p>No projects found...</p>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }
 
 /* -------------------------------------------------------------------------------------------------
- * Nav
+ * SidebarNav
  * -----------------------------------------------------------------------------------------------*/
 
-function Nav({ children }: { children: React.ReactNode }) {
+export function SidebarNav({ children }: { children: React.ReactNode }) {
 	return (
-		<nav>
-			<div className="px-10">
-				<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />
-			</div>
-			<ul className="mt-8">
-				<TopLevelNav />
-			</ul>
-			<div className="mt-8">
-				<div className="flex items-center justify-between px-10">
-					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
-						Projects
-					</h5>
-					<NavLink
-						to="new"
-						className="p-2 rounded-md dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300"
-					>
-						<PlusSmIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-					</NavLink>
-				</div>
-				<div>{children}</div>
-			</div>
-		</nav>
+		<div className="mt-8">
+			<nav className="space-y-8">{children}</nav>
+		</div>
 	);
 }
 
 /* -------------------------------------------------------------------------------------------------
- * Header
+ * Sidebar
  * -----------------------------------------------------------------------------------------------*/
 
-interface HeaderProps {
+interface SidebarProps {
 	children: React.ReactNode;
-	className?: string;
 }
 
-export function Header({ children, className }: HeaderProps) {
+export function Sidebar({ children }: SidebarProps) {
 	return (
-		<header className={clsx('bg-white p-6 dark:bg-gray-800', className)}>
-			<div className="flex items-center justify-between">
-				<div>{children}</div>
-			</div>
-		</header>
-	);
-}
-
-/* -------------------------------------------------------------------------------------------------
- * SidebarLayout
- * -----------------------------------------------------------------------------------------------*/
-
-// TEMP
-
-interface SidebarLayoutProps {
-	children: React.ReactNode;
-	projects: Array<Project>;
-}
-
-export function SidebarLayout({ children, projects }: SidebarLayoutProps) {
-	return (
-		<>
-			<div className="fixed top-0 bottom-0 left-0 block max-h-full overflow-y-auto bg-gray-100 w-80 dark:bg-gray-700">
+		<div className="fixed top-0 bottom-0 left-0 overflow-y-auto w-80">
+			<div className="bg-gray-100 dark:bg-gray-700">
 				<div className="py-6">
-					<Nav>
-						<ProjectsList projects={projects} />
-					</Nav>
-				</div>
-			</div>
-
-			<div className="pl-80">
-				<div id="content" className="p-8 py-4">
+					<div className="px-10">
+						<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />
+					</div>
 					{children}
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }

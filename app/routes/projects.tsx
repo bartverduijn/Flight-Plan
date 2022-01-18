@@ -4,7 +4,10 @@ import type { Project } from '@prisma/client';
 import { db } from '~/utils/db.server';
 import {
 	Header,
-	SidebarLayout,
+	ProjectsNav,
+	Sidebar,
+	SidebarNav,
+	TopLevelNav,
 	useSidebarContext,
 	withSidebarProvider,
 } from '~/components/SidebarLayout';
@@ -24,14 +27,14 @@ export const loader: LoaderFunction = async () => {
 
 function Projects() {
 	const data: LoaderData = useLoaderData();
-	const ctx = useSidebarContext();
+	const { toggleSidebar } = useSidebarContext();
 
 	return (
 		<>
 			<div className="pl-80">
 				<Header>
 					<div className="flex items-center space-x-6">
-						<IconButton alt="Open Nav" onClick={ctx?.toggleNav}>
+						<IconButton alt="Open Nav" onClick={toggleSidebar}>
 							<MenuAlt1Icon />
 						</IconButton>
 						<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
@@ -41,11 +44,22 @@ function Projects() {
 				</Header>
 			</div>
 
-			<SidebarLayout projects={data.projects}>
-				<main className="mx-auto max-w-7xl">
-					<Outlet />
-				</main>
-			</SidebarLayout>
+			<Sidebar>
+				<SidebarNav>
+					<TopLevelNav />
+					<ProjectsNav projects={data.projects} />
+				</SidebarNav>
+			</Sidebar>
+
+			<div className="pl-80">
+				<div className="mx-auto max-w-7xl">
+					<main>
+						<div className="p-8 py-4">
+							<Outlet />
+						</div>
+					</main>
+				</div>
+			</div>
 		</>
 	);
 }
