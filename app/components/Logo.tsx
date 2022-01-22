@@ -1,5 +1,3 @@
-import { AccessibleIcon } from './AccessibleIcon';
-
 export function Logo({ className }: { className?: string }) {
 	return (
 		<svg
