@@ -3,70 +3,8 @@ import { NavLink } from 'remix';
 import type { NavLinkProps } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
-import {
-	InboxIcon,
-	CalendarIcon,
-	CollectionIcon,
-	PlusSmIcon,
-} from '@heroicons/react/outline';
+import { PlusSmIcon } from '@heroicons/react/outline';
 import { Logo } from '~/components/Logo';
-
-/* -------------------------------------------------------------------------------------------------
- * SidebarContext
- * -----------------------------------------------------------------------------------------------*/
-
-interface SidebarContextInterface {
-	sidebarIsOpen: boolean;
-	openSidebar: () => void;
-	closeSidebar: () => void;
-	toggleSidebar: () => void;
-}
-
-export const SidebarContext = React.createContext<
-	SidebarContextInterface | undefined
->(undefined);
-
-SidebarContext.displayName = 'SidebarContext';
-
-/* -----------------------------------------------------------------------------------------------*/
-
-export function useSidebarContext() {
-	const context = React.useContext(SidebarContext);
-	if (context === undefined) {
-		throw Error('useSidebarContext must be used within a SidebarProvider');
-	}
-	return context;
-}
-
-/* -----------------------------------------------------------------------------------------------*/
-
-export function withSidebarProvider<T>(Component: React.ComponentType<T>) {
-	const displayName = Component.displayName || Component.name || 'Component';
-
-	const ComponentWithSidebarContext = (props: T) => {
-		const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false);
-		const openSidebar = () => setSidebarIsOpen(true);
-		const closeSidebar = () => setSidebarIsOpen(false);
-		const toggleSidebar = () => setSidebarIsOpen(!sidebarIsOpen);
-
-		return (
-			<SidebarContext.Provider
-				value={{
-					sidebarIsOpen,
-					openSidebar,
-					closeSidebar,
-					toggleSidebar,
-				}}
-			>
-				<Component {...props} />
-			</SidebarContext.Provider>
-		);
-	};
-
-	ComponentWithSidebarContext.displayName = `withSidebarProvider(${displayName})`;
-
-	return ComponentWithSidebarContext;
-}
 
 /* -------------------------------------------------------------------------------------------------
  * Header
@@ -95,11 +33,10 @@ interface TopLevelNavItemProps extends NavLinkProps {
 	icon: React.ReactNode;
 }
 
-const TopLevelNavItem = React.forwardRef<
+export const TopLevelNavItem = React.forwardRef<
 	HTMLAnchorElement,
 	TopLevelNavItemProps
 >(({ icon, children, ...props }, forwardedRef) => {
-	const ctx = React.useContext(SidebarContext);
 	return (
 		<li>
 			<NavLink
@@ -112,14 +49,13 @@ const TopLevelNavItem = React.forwardRef<
 							: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 					)
 				}
-				onClick={() => ctx?.closeSidebar()}
 				prefetch="intent"
 				{...props}
 				end
 			>
 				{({ isActive }) => (
 					<>
-						{/* // TODO Replace with AccessibleIcon */}
+						{/* // FIXME: Replace with AccessibleIcon */}
 						<span
 							className={clsx(
 								'mr-4',
@@ -140,24 +76,6 @@ const TopLevelNavItem = React.forwardRef<
 
 TopLevelNavItem.displayName = 'TopLevelNavItem';
 
-/* -----------------------------------------------------------------------------------------------*/
-
-export function TopLevelNav() {
-	return (
-		<ul>
-			<TopLevelNavItem to="" icon={<InboxIcon className="w-6 h-6" />}>
-				Inbox
-			</TopLevelNavItem>
-			<TopLevelNavItem to="today" icon={<CalendarIcon className="w-6 h-6" />}>
-				Today
-			</TopLevelNavItem>
-			<TopLevelNavItem to="all" icon={<CollectionIcon className="w-6 h-6" />}>
-				All Tasks
-			</TopLevelNavItem>
-		</ul>
-	);
-}
-
 /* -------------------------------------------------------------------------------------------------
  * NavItem
  * -----------------------------------------------------------------------------------------------*/
@@ -168,7 +86,6 @@ interface NavItemProps extends NavLinkProps {
 
 const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 	({ children, ...props }, forwardedRef) => {
-		const ctx = React.useContext(SidebarContext);
 		return (
 			<li>
 				<NavLink
@@ -181,7 +98,6 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 								: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
 						)
 					}
-					onClick={() => ctx?.closeSidebar()}
 					prefetch="intent"
 					{...props}
 				>
@@ -251,12 +167,18 @@ export function SidebarNav({ children }: { children: React.ReactNode }) {
 
 interface SidebarProps {
 	children: React.ReactNode;
+	className?: string;
 }
 
-export function Sidebar({ children }: SidebarProps) {
+export function Sidebar({ children, className }: SidebarProps) {
 	return (
-		<div className="fixed top-0 bottom-0 left-0 overflow-y-auto w-80">
-			<div className="bg-gray-100 dark:bg-gray-700">
+		<div
+			className={clsx(
+				'fixed top-0 bottom-0 left-0 overflow-y-auto w-80',
+				className
+			)}
+		>
+			<div className="h-full bg-gray-100 dark:bg-gray-700">
 				<div className="py-6">
 					<div className="px-10">
 						<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />

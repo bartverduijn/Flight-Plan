@@ -3,7 +3,8 @@
 ## Layout
 - [x] Style 'new' page
 - [x] Style error messages (prevent layout shift)
-- [ ] Make layout component more reusable
+- [x] Make layout component more reusable
+- [x] Add SkipNav (create helper function)
 - [ ] Add mobile styles
 - [ ] Use useMatches to add header title
 
@@ -12,5 +13,5 @@
 - [ ] Delete projects
 
 ## Tasks
-- [ ] Add Tasks to schema
+- [x] Add Tasks to schema
 - [ ] Create Form component to add tasks ($id, index)
