@@ -1,8 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { AccessibleIcon } from './AccessibleIcon';
-import { Link, LinkProps, useHref } from 'remix';
-import { DownloadIcon } from '@heroicons/react/outline';
+import { Link, LinkProps } from 'remix';
 
 /* -------------------------------------------------------------------------------------------------
  * Button
