@@ -7,12 +7,18 @@ import { AnchorOrLink } from './AnchorOrLink';
  * Button
  * -----------------------------------------------------------------------------------------------*/
 
-type ButtonProps = React.ComponentPropsWithRef<'button'>;
+/* eslint-disable react/button-has-type */
+// This interface make the previous eslint-rule unnecessary.
+interface ButtonProps
+	extends Omit<React.ComponentPropsWithRef<'button'>, 'type'> {
+	type: 'button' | 'submit' | 'reset';
+}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ children, className, ...props }, forwardedRef) => {
+	({ children, className, type, ...props }, forwardedRef) => {
 		return (
 			<button
+				type={type}
 				ref={forwardedRef}
 				className={clsx(
 					'relative inline-flex justify-center text-center text-indigo-50 font-medium rounded-md outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70',
@@ -67,7 +73,7 @@ interface IconButtonProps extends ButtonProps {
 }
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-	({ children, alt, className, ...props }, forwardedRef) => {
+	({ children, alt, className, type, ...props }, forwardedRef) => {
 		return (
 			<button
 				className={clsx(
@@ -75,6 +81,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
 					className
 				)}
 				ref={forwardedRef}
+				type={type}
 				{...props}
 			>
 				<AccessibleIcon

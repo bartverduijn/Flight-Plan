@@ -1,9 +1,13 @@
+/* eslint-disable no-void */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { PrismaClient } from '@prisma/client';
 
+// eslint-disable-next-line import/no-mutable-exports
 let db: PrismaClient;
 
 declare global {
-	// eslint-disable-next-line no-var, @typescript-eslint/naming-convention
+	// eslint-disable-next-line vars-on-top, no-var
 	var __db: PrismaClient | undefined;
 }
 

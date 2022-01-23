@@ -14,7 +14,7 @@ interface AnchorOrLinkProps extends React.ComponentPropsWithRef<'a'> {
 export const AnchorOrLink = React.forwardRef<
 	HTMLAnchorElement,
 	AnchorOrLinkProps
->(({ children, to, href, download, ...props }, forwardedRef) => {
+>(({ children, to, href, download, prefetch, ...props }, forwardedRef) => {
 	let toUrl = '';
 	// Download links should always be a normal anchor
 	let shouldUseRegularAnchor = !!download;
@@ -50,7 +50,12 @@ export const AnchorOrLink = React.forwardRef<
 	}
 
 	return (
-		<Link to={to || href || ''} ref={forwardedRef} {...props}>
+		<Link
+			to={to || href || ''}
+			prefetch={prefetch}
+			ref={forwardedRef}
+			{...props}
+		>
 			{children}
 		</Link>
 	);
