@@ -1,7 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { AccessibleIcon } from './AccessibleIcon';
-import { Link, LinkProps } from 'remix';
+import { AnchorOrLink } from './AnchorOrLink';
 
 /* -------------------------------------------------------------------------------------------------
  * Button
@@ -27,66 +27,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
-
-/* -------------------------------------------------------------------------------------------------
- * AnchorOrLink
- * -----------------------------------------------------------------------------------------------*/
-
-type AnchorProps = React.ComponentPropsWithRef<'a'>;
-
-export const AnchorOrLink = React.forwardRef<
-	HTMLAnchorElement,
-	AnchorProps & {
-		to?: LinkProps['to'];
-		prefetch?: LinkProps['prefetch'];
-	}
->(({ children, to, href, download, ...props }, forwardedRef) => {
-	let toUrl = '';
-	// Download links should always be a normal <a>
-	let shouldBeRegularAnchor = !!download;
-
-	// Allow a href attribute, so that I can fall back on an anchor if I want to
-	if (!shouldBeRegularAnchor && typeof href === 'string') {
-		// e.g.: to="https://(...)", but also to="mailto:(...)" or to="file:(...)"
-		shouldBeRegularAnchor = href.includes(':') || href.startsWith('#');
-	}
-
-	// The to attribute on a link can be a string or a object
-	if (!shouldBeRegularAnchor && typeof to === 'string') {
-		toUrl = to;
-		shouldBeRegularAnchor = to.includes(':');
-	}
-
-	if (!shouldBeRegularAnchor && typeof to === 'object') {
-		// Explanation of the properties: https://github.com/remix-run/history/blob/main/docs/api-reference.md#location.hash
-		toUrl = `${to.pathname || ''}${to.hash ? `#${to.hash}` : ''}${
-			to.search ? `?${to.search}` : ''
-		}`;
-		// to.pathname may be undefined
-		shouldBeRegularAnchor = to.pathname?.includes(':') || false;
-	}
-
-	if (shouldBeRegularAnchor) {
-		return (
-			<a
-				href={href || toUrl}
-				download={!!download}
-				ref={forwardedRef}
-				{...props}
-			>
-				{children}
-			</a>
-		);
-	}
-
-	return (
-		<Link to={to || href || ''} ref={forwardedRef} {...props}>
-			{children}
-		</Link>
-	);
-});
-
-AnchorOrLink.displayName = 'LinkOrAnchor';
 
 /* -------------------------------------------------------------------------------------------------
  * ButtonLink
