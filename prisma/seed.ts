@@ -7,10 +7,10 @@ function getProjects() {
 
 async function seed() {
 	await Promise.all(
-		getProjects().map(project => {
+		getProjects().map((project) => {
 			return db.project.create({ data: project });
 		})
 	);
 }
 
-seed().catch(err => console.error(err));
+seed().catch((err) => console.error(err));

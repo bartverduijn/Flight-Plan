@@ -46,9 +46,11 @@ function Projects() {
 						<IconButton
 							alt="Open Nav"
 							onClick={() => {
-								setSidebarIsOpen(isOpen => {
+								setSidebarIsOpen((isOpen) => {
 									const nextState = !isOpen;
-									if (nextState) navNode.current?.focus();
+									if (nextState && navNode.current) {
+										navNode.current.focus();
+									}
 									return nextState;
 								});
 							}}

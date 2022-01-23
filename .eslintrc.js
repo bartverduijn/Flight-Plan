@@ -21,8 +21,6 @@ module.exports = {
 	},
 	plugins: ['react', 'import'],
 	rules: {
-		indent: ['error', 'tab'],
-		'no-tabs': 'off',
 		'no-unused-vars': [
 			'warn',
 			{
