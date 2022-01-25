@@ -17,7 +17,7 @@ import {
 	SidebarNav,
 	TopLevelNavItem,
 } from '~/components/SidebarLayout';
-import { ButtonLink, IconButton } from '~/components/Button';
+import { Button, ButtonLink } from '~/components/Button';
 
 interface LoaderData {
 	projects: Array<Project>;
@@ -43,8 +43,16 @@ function Projects() {
 			<div className={clsx(sidebarIsOpen ? 'pl-80' : null)}>
 				<Header>
 					<div className="flex items-center space-x-6">
-						<IconButton
-							alt="Open Nav"
+						<Button
+							size="large"
+							shape="square"
+							variant="text"
+							icon={
+								<span>
+									<MenuAlt1Icon aria-hidden="true" className="w-6 h-6" />
+									<span className="sr-only">Toggle Sidebar</span>
+								</span>
+							}
 							onClick={() => {
 								setSidebarIsOpen((isOpen) => {
 									const nextState = !isOpen;
@@ -54,9 +62,7 @@ function Projects() {
 									return nextState;
 								});
 							}}
-						>
-							<MenuAlt1Icon />
-						</IconButton>
+						/>
 						<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
 							Temporary header
 						</h1>

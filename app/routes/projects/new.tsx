@@ -8,7 +8,6 @@ import {
 	Form,
 } from 'remix';
 import * as React from 'react';
-import { AccessibleIcon } from '~/components/AccessibleIcon';
 import { Button } from '~/components/Button';
 import { TextField } from '~/components/Form';
 import { db } from '~/utils/db.server';
@@ -112,7 +111,7 @@ export default function New() {
 							/>
 						</div>
 						<div className="col-span-2 text-right">
-							<Button type="submit">
+							<Button type="submit" size="large" variant="base">
 								{state === 'submitting' ? 'Submitting...' : 'Submit'}
 							</Button>
 						</div>
@@ -120,9 +119,9 @@ export default function New() {
 						{/* Errors */}
 						{actionData?.formError || actionData?.fieldErrors?.name ? (
 							<div className="flex col-span-2 gap-4 p-4 text-sm text-red-700 rounded-md bg-red-50 dark:bg-red-900 dark:text-red-100">
-								<AccessibleIcon className="w-5 h-5 text-red-400" alt="Error">
-									<XCircleIcon />
-								</AccessibleIcon>
+								<span aria-hidden="true">
+									<XCircleIcon className="w-5 h-5 text-red-400" />
+								</span>
 								<div>
 									<h5 className="font-semibold text-red-700 dark:text-red-50">
 										The following errors occurred with your submission

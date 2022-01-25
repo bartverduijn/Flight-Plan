@@ -1,32 +1,78 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { AccessibleIcon } from './AccessibleIcon';
 import { AnchorOrLink } from './AnchorOrLink';
 
 /* -------------------------------------------------------------------------------------------------
  * Button
  * -----------------------------------------------------------------------------------------------*/
 
-/* eslint-disable react/button-has-type */
-// This interface make the previous eslint-rule unnecessary.
-interface ButtonProps
-	extends Omit<React.ComponentPropsWithRef<'button'>, 'type'> {
-	type: 'button' | 'submit' | 'reset';
+interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
+	type?: 'button' | 'reset' | 'submit';
+	variant?: 'base' | 'outline' | 'text';
+	size?: 'small' | 'medium' | 'large';
+	shape?: 'rectangle' | 'square';
+	icon?: React.ReactNode;
+	block?: boolean;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ children, className, type, ...props }, forwardedRef) => {
+	(
+		{
+			children,
+			type = 'button',
+			variant = 'base',
+			size = 'medium',
+			shape = 'rectangle',
+			icon,
+			block,
+			className,
+			...props
+		},
+		forwardedRef
+	) => {
 		return (
 			<button
-				type={type}
 				ref={forwardedRef}
+				// eslint-disable-next-line react/button-has-type
+				type={type}
+				// I absolutely hate this
 				className={clsx(
-					'relative inline-flex justify-center text-center text-indigo-50 font-medium rounded-md outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-70',
+					'group relative inline-flex cursor-pointer outline-none overflow-hidden items-center justify-center align-middle whitespace-nowrap rounded-md select-none touch-manipulation text-center',
+					{
+						'h-6 text-xs px-2': size === 'small',
+						'h-8 text-sm px-4': size === 'medium',
+						'h-10 text-base px-6': size === 'large',
+					},
+					{
+						'w-6 px-0': shape !== 'rectangle' && size === 'small',
+						'w-8 px-0': shape !== 'rectangle' && size === 'medium',
+						'w-10 px-0': shape !== 'rectangle' && size === 'large',
+					},
+					'disabled:cursor-not-allowed disabled:opacity-70',
+					{
+						'bg-indigo-600 text-indigo-50 hover:bg-indigo-500 dark:hover:bg-indigo-700 disabled:hover:bg-indigo-600 dark:disabled:hover:bg-indigo-600':
+							variant === 'base',
+						'bg-transparent border border-gray-300 text-gray-700 hover:border-indigo-500 hover:text-indigo-700 dark:border-gray-500 dark:text-gray-300 dark:hover:text-indigo-400 dark:hover:border-indigo-500 disabled:hover:border-gray-300 disabled:hover:text-gray-700 dark:disabled:hover:border-gray-500 dark:disabled:hover:text-gray-300':
+							variant === 'outline',
+						'text-gray-700 bg-transparent hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-200 dark:hover:bg-gray-700 disabled:hover:bg-transparent dark:disabled:hover:text-gray-300 dark:disabled:hover:bg-transparent':
+							variant === 'text',
+					},
+					{ 'block w-full': block },
+					'focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800',
 					className
 				)}
 				{...props}
 			>
-				{children}
+				{icon ? (
+					<>
+						{icon}
+						{children ? (
+							<span className="relative ml-2">{children}</span>
+						) : null}
+					</>
+				) : (
+					<span className="relative">{children}</span>
+				)}
 			</button>
 		);
 	}
@@ -63,36 +109,3 @@ export const ButtonLink = React.forwardRef<
 });
 
 ButtonLink.displayName = 'ButtonLink';
-
-/* -------------------------------------------------------------------------------------------------
- * IconButton
- * -----------------------------------------------------------------------------------------------*/
-
-interface IconButtonProps extends ButtonProps {
-	alt: string;
-}
-
-export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-	({ children, alt, className, type, ...props }, forwardedRef) => {
-		return (
-			<button
-				className={clsx(
-					'bg-white p-2 rounded-md dark:bg-gray-800 w-10 h-10 dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300 disabled:opacity-70 disabled:hover:bg-transparent disabled:cursor-not-allowed',
-					className
-				)}
-				ref={forwardedRef}
-				type={type}
-				{...props}
-			>
-				<AccessibleIcon
-					alt={alt}
-					className="text-gray-400 dark:text-gray-300 group-hover:text-gray-500 dark:group-hover:text-gray-200 group-disabled:text-gray-200 dark:group-disabled:text-gray-600"
-				>
-					{children}
-				</AccessibleIcon>
-			</button>
-		);
-	}
-);
-
-IconButton.displayName = 'IconButton';
