@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'remix';
 import type { NavLinkProps } from 'remix';
-import type { Project } from '@prisma/client';
 import clsx from 'clsx';
-import { PlusSmIcon } from '@heroicons/react/outline';
 import { Logo } from '~/components/Logo';
 
 /* -------------------------------------------------------------------------------------------------
@@ -84,7 +82,7 @@ interface NavItemProps extends NavLinkProps {
 	key: string;
 }
 
-const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
+export const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 	({ children, ...props }, forwardedRef) => {
 		return (
 			<li>
@@ -111,10 +109,15 @@ const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 NavItem.displayName = 'NavItem';
 
 /* -------------------------------------------------------------------------------------------------
- * ProjectsNav
+ * NavSection
  * -----------------------------------------------------------------------------------------------*/
 
-export function ProjectsNav({ projects }: { projects: Array<Project> }) {
+interface NavSectionProps {
+	link?: React.ReactNode;
+	children?: React.ReactNode;
+}
+
+export function NavSection({ link, children }: NavSectionProps) {
 	return (
 		<div>
 			<div className="px-10">
@@ -122,41 +125,10 @@ export function ProjectsNav({ projects }: { projects: Array<Project> }) {
 					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
 						Projects
 					</h5>
-					<NavLink
-						to="new"
-						className="p-2 rounded-md dark:hover:bg-gray-600 group hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:focus:ring-indigo-300"
-					>
-						<PlusSmIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-					</NavLink>
+					{link}
 				</div>
 			</div>
-
-			{projects.length ? (
-				<ul>
-					{projects.map(({ id, name }) => (
-						<NavItem key={id} to={id}>
-							{name}
-						</NavItem>
-					))}
-				</ul>
-			) : (
-				// TODO: Add empty state
-				<div className="px-10">
-					<p>No projects found...</p>
-				</div>
-			)}
-		</div>
-	);
-}
-
-/* -------------------------------------------------------------------------------------------------
- * SidebarNav
- * -----------------------------------------------------------------------------------------------*/
-
-export function SidebarNav({ children }: { children: React.ReactNode }) {
-	return (
-		<div className="mt-8">
-			<nav className="space-y-8">{children}</nav>
+			{children}
 		</div>
 	);
 }
@@ -178,7 +150,7 @@ export function Sidebar({ children, className }: SidebarProps) {
 				className
 			)}
 		>
-			<div className="h-full bg-gray-100 dark:bg-gray-700">
+			<div className="min-h-full bg-gray-100 dark:bg-gray-700">
 				<div className="py-6">
 					<div className="px-10">
 						<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />

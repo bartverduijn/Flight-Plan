@@ -9,12 +9,13 @@ import {
 	CollectionIcon,
 	MenuAlt1Icon,
 } from '@heroicons/react/outline';
+import { PlusSmIcon } from '@heroicons/react/solid';
 import { db } from '~/utils/db.server';
 import {
 	Header,
-	ProjectsNav,
+	NavItem,
+	NavSection,
 	Sidebar,
-	SidebarNav,
 	TopLevelNavItem,
 } from '~/components/SidebarLayout';
 import { Button, ButtonLink } from '~/components/Button';
@@ -71,7 +72,8 @@ function Projects() {
 
 				<ButtonLink
 					href="#content"
-					className="z-50 sr-only focus:fixed focus:not-sr-only top-4 left-4 focus:px-4 focus:py-2"
+					size="large"
+					className="z-50 sr-only focus:fixed focus:not-sr-only top-4 left-4 focus:h-10 focus:px-6"
 				>
 					Skip to content
 				</ButtonLink>
@@ -80,30 +82,53 @@ function Projects() {
 			<Sidebar
 				className={clsx(sidebarIsOpen ? 'translate-x-0' : '-translate-x-full')}
 			>
-				<SidebarNav>
-					<ul onFocus={() => setSidebarIsOpen(true)}>
-						<TopLevelNavItem
-							ref={navNode}
-							to=""
-							icon={<InboxIcon className="w-6 h-6" />}
+				<div className="mt-8">
+					<nav className="space-y-8">
+						<ul onFocus={() => setSidebarIsOpen(true)}>
+							<TopLevelNavItem
+								ref={navNode}
+								to=""
+								icon={<InboxIcon className="w-6 h-6" />}
+							>
+								Inbox
+							</TopLevelNavItem>
+							<TopLevelNavItem
+								to="today"
+								icon={<CalendarIcon className="w-6 h-6" />}
+							>
+								Today
+							</TopLevelNavItem>
+							<TopLevelNavItem
+								to="all"
+								icon={<CollectionIcon className="w-6 h-6" />}
+							>
+								All Tasks
+							</TopLevelNavItem>
+						</ul>
+						<NavSection
+							link={
+								<ButtonLink to="new" shape="square" variant="text">
+									<PlusSmIcon className="w-5 h-5" />
+								</ButtonLink>
+							}
 						>
-							Inbox
-						</TopLevelNavItem>
-						<TopLevelNavItem
-							to="today"
-							icon={<CalendarIcon className="w-6 h-6" />}
-						>
-							Today
-						</TopLevelNavItem>
-						<TopLevelNavItem
-							to="all"
-							icon={<CollectionIcon className="w-6 h-6" />}
-						>
-							All Tasks
-						</TopLevelNavItem>
-					</ul>
-					<ProjectsNav projects={data.projects} />
-				</SidebarNav>
+							{data.projects.length ? (
+								<ul>
+									{data.projects.map(({ id, name }) => (
+										<NavItem key={id} to={id}>
+											{name}
+										</NavItem>
+									))}
+								</ul>
+							) : (
+								// TODO: Add empty state
+								<div className="px-10">
+									<p>No projects found...</p>
+								</div>
+							)}
+						</NavSection>
+					</nav>
+				</div>
 			</Sidebar>
 
 			<div className={clsx(sidebarIsOpen ? 'pl-80' : null)}>
