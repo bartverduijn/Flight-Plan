@@ -17,7 +17,7 @@ function Document({ children }: LayoutProps) {
 				<title>Flight Plan</title>
 				<Links />
 			</head>
-			<body className="relative h-screen antialiased text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-300">
+			<body className="relative h-screen bg-white text-gray-700 antialiased dark:bg-gray-800 dark:text-gray-300">
 				{children}
 				<Scripts />
 				{process.env.NODE_ENV === 'development' ? <LiveReload /> : null}

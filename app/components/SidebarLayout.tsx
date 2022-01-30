@@ -41,10 +41,10 @@ export const TopLevelNavItem = React.forwardRef<
 				ref={forwardedRef}
 				className={({ isActive }) =>
 					clsx(
-						'group flex items-center h-10 px-10 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
+						'group flex h-10 items-center px-10 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:hover:bg-gray-600 dark:focus:ring-indigo-300',
 						isActive
 							? 'font-semibold text-indigo-600 dark:text-gray-50'
-							: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
+							: 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-200'
 					)
 				}
 				prefetch="intent"
@@ -59,7 +59,7 @@ export const TopLevelNavItem = React.forwardRef<
 								'mr-4',
 								isActive
 									? 'text-indigo-500 dark:text-gray-100'
-									: 'text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-300'
+									: 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300'
 							)}
 						>
 							{icon}
@@ -90,10 +90,10 @@ export const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(
 					ref={forwardedRef}
 					className={({ isActive }) =>
 						clsx(
-							'group flex items-center h-10 px-10 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-inset focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 focus:outline-none',
+							'group flex h-10 items-center px-10 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:hover:bg-gray-600 dark:focus:ring-indigo-300',
 							isActive
 								? 'font-semibold text-indigo-600 dark:text-gray-50'
-								: 'dark:text-gray-300 text-gray-600 hover:text-gray-900 dark:hover:text-gray-200'
+								: 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-200'
 						)
 					}
 					prefetch="intent"
@@ -122,7 +122,7 @@ export function NavSection({ link, children }: NavSectionProps) {
 		<div>
 			<div className="px-10">
 				<div className="flex items-center justify-between">
-					<h5 className="text-sm font-bold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+					<h5 className="text-sm font-bold uppercase tracking-wide text-gray-400 dark:text-gray-500">
 						Projects
 					</h5>
 					{link}
@@ -146,14 +146,14 @@ export function Sidebar({ children, className }: SidebarProps) {
 	return (
 		<div
 			className={clsx(
-				'fixed top-0 bottom-0 left-0 overflow-y-auto w-80',
+				'fixed top-0 bottom-0 left-0 w-80 overflow-y-auto',
 				className
 			)}
 		>
 			<div className="min-h-full bg-gray-100 dark:bg-gray-700">
 				<div className="py-6">
 					<div className="px-10">
-						<Logo className="w-10 h-10 text-gray-600 dark:text-indigo-300" />
+						<Logo className="h-10 w-10 text-gray-600 dark:text-indigo-300" />
 					</div>
 					{children}
 				</div>

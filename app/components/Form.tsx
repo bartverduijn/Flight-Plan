@@ -13,7 +13,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 			<input
 				ref={forwardedRef}
 				className={clsx(
-					'block w-full px-3 py-2 mt-1 border-2 border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-700 dark:border-none dark:ring-offset-gray-800',
+					'mt-1 block w-full rounded-md border-2 border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-none dark:bg-gray-700 dark:ring-offset-gray-800',
 					className
 				)}
 				{...props}

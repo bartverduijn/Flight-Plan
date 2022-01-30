@@ -50,7 +50,7 @@ function Projects() {
 							variant="text"
 							icon={
 								<span>
-									<MenuAlt1Icon aria-hidden="true" className="w-6 h-6" />
+									<MenuAlt1Icon aria-hidden="true" className="h-6 w-6" />
 									<span className="sr-only">Toggle Sidebar</span>
 								</span>
 							}
@@ -73,7 +73,7 @@ function Projects() {
 				<ButtonLink
 					href="#content"
 					size="large"
-					className="z-50 sr-only focus:fixed focus:not-sr-only top-4 left-4 focus:h-10 focus:px-6"
+					className="sr-only top-4 left-4 z-50 focus:not-sr-only focus:fixed focus:h-10 focus:px-6"
 				>
 					Skip to content
 				</ButtonLink>
@@ -88,19 +88,19 @@ function Projects() {
 							<TopLevelNavItem
 								ref={navNode}
 								to=""
-								icon={<InboxIcon className="w-6 h-6" />}
+								icon={<InboxIcon className="h-6 w-6" />}
 							>
 								Inbox
 							</TopLevelNavItem>
 							<TopLevelNavItem
 								to="today"
-								icon={<CalendarIcon className="w-6 h-6" />}
+								icon={<CalendarIcon className="h-6 w-6" />}
 							>
 								Today
 							</TopLevelNavItem>
 							<TopLevelNavItem
 								to="all"
-								icon={<CollectionIcon className="w-6 h-6" />}
+								icon={<CollectionIcon className="h-6 w-6" />}
 							>
 								All Tasks
 							</TopLevelNavItem>
@@ -108,7 +108,7 @@ function Projects() {
 						<NavSection
 							link={
 								<ButtonLink to="new" shape="square" variant="text">
-									<PlusSmIcon className="w-5 h-5" />
+									<PlusSmIcon className="h-5 w-5" />
 								</ButtonLink>
 							}
 						>

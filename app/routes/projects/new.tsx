@@ -118,15 +118,15 @@ export default function New() {
 
 						{/* Errors */}
 						{actionData?.formError || actionData?.fieldErrors?.name ? (
-							<div className="flex col-span-2 gap-4 p-4 text-sm text-red-700 rounded-md bg-red-50 dark:bg-red-900 dark:text-red-100">
+							<div className="col-span-2 flex gap-4 rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900 dark:text-red-100">
 								<span aria-hidden="true">
-									<XCircleIcon className="w-5 h-5 text-red-400" />
+									<XCircleIcon className="h-5 w-5 text-red-400" />
 								</span>
 								<div>
 									<h5 className="font-semibold text-red-700 dark:text-red-50">
 										The following errors occurred with your submission
 									</h5>
-									<ul className="mt-2 list-disc list-inside">
+									<ul className="mt-2 list-inside list-disc">
 										{actionData?.formError ? (
 											<li role="alert" id="form-error">
 												{actionData.formError}
