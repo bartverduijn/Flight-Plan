@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Outlet, useLoaderData } from 'remix';
+import { Outlet, useLoaderData, useMatches } from 'remix';
 import type { LoaderFunction } from 'remix';
 import type { Project } from '@prisma/client';
 import clsx from 'clsx';
@@ -34,6 +34,9 @@ export const loader: LoaderFunction = async () => {
 
 function Projects() {
 	const data: LoaderData = useLoaderData();
+	const matches = useMatches();
+
+	const [{ handle }] = matches.slice(-1);
 
 	const [sidebarIsOpen, setSidebarIsOpen] = React.useState<boolean>(true);
 
@@ -65,7 +68,8 @@ function Projects() {
 							}}
 						/>
 						<h1 className="text-3xl font-medium text-gray-800 dark:text-gray-100">
-							Temporary header
+							{/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+							{handle?.heading || 'Flight Plan'}
 						</h1>
 					</div>
 				</Header>

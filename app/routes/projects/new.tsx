@@ -12,6 +12,10 @@ import { Button } from '~/components/Button';
 import { TextField } from '~/components/Form';
 import { db } from '~/utils/db.server';
 
+export const handle = {
+	heading: 'New Project',
+};
+
 interface FieldErrors {
 	name: string | null;
 }

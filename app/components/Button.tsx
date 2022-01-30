@@ -131,6 +131,7 @@ export const ButtonLink = React.forwardRef<
 					},
 					'disabled:cursor-not-allowed disabled:opacity-70',
 					{
+						// FIXME: fix the dark:disabled:hover stuff so that disabled will overrule the other classes
 						'bg-indigo-600 text-indigo-50 hover:bg-indigo-500 disabled:hover:bg-indigo-600 dark:hover:bg-indigo-700 dark:disabled:hover:bg-indigo-600':
 							variant === 'base',
 						'border border-gray-300 bg-transparent text-gray-700 hover:border-indigo-500 hover:text-indigo-700 disabled:hover:border-gray-300 disabled:hover:text-gray-700 dark:border-gray-500 dark:text-gray-300 dark:hover:border-indigo-500 dark:hover:text-indigo-400 dark:disabled:hover:border-gray-500 dark:disabled:hover:text-gray-300':
