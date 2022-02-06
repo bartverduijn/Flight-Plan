@@ -1,24 +1,44 @@
 import * as React from 'react';
 import { VisuallyHidden } from './VisuallyHidden';
 
-export function AccessibleIcon({
-	children,
-	alt,
-	className,
-}: {
+/* -------------------------------------------------------------------------------------------------
+ * AccessibleIcon
+ * -----------------------------------------------------------------------------------------------*/
+
+interface AccessibleIconProps {
 	children: React.ReactNode;
 	alt: string;
-	className?: string;
-}) {
+}
+
+export function AccessibleIcon({ children, alt }: AccessibleIconProps) {
 	const child = React.Children.only(children);
 	return (
 		<>
 			{React.cloneElement(child as React.ReactElement, {
 				'aria-hidden': 'true',
 				focusable: 'false',
-				className,
 			})}
 			<VisuallyHidden>{alt}</VisuallyHidden>
+		</>
+	);
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * HiddenIcon
+ * -----------------------------------------------------------------------------------------------*/
+
+interface HiddenIconProps {
+	children: React.ReactNode;
+}
+
+export function HiddenIcon({ children }: HiddenIconProps) {
+	const child = React.Children.only(children);
+	return (
+		<>
+			{React.cloneElement(child as React.ReactElement, {
+				'aria-hidden': 'true',
+				focusable: 'false',
+			})}
 		</>
 	);
 }
