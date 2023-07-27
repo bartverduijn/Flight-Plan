@@ -5,21 +5,7 @@ module.exports = {
 		node: true,
 		commonjs: true,
 	},
-	extends: [
-		'airbnb',
-		'airbnb/hooks',
-		'airbnb-typescript',
-		'plugin:@typescript-eslint/recommended',
-		'plugin:@typescript-eslint/recommended-requiring-type-checking',
-		'plugin:prettier/recommended',
-	],
-	parser: '@typescript-eslint/parser',
-	parserOptions: {
-		project: ['./tsconfig.json'],
-		ecmaFeatures: {
-			jsx: true,
-		},
-	},
+	extends: ['airbnb', 'airbnb/hooks', 'plugin:prettier/recommended'],
 	rules: {
 		'no-nested-ternary': ['off'],
 		'no-unused-vars': [
